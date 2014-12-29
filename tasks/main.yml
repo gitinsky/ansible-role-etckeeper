@@ -1,0 +1,14 @@
+- name: install EPEL repo
+  yum: name=http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm state=present
+
+- name: setup etckeeper
+  yum: name=etckeeper state=present
+
+- name: check if a repo is initialized already
+  command: bash -c "cd /etc && git status"
+  ignore_errors: True
+  register: result
+
+- name: init etckeeper repo
+  command: bash -c "etckeeper init && etckeeper commit \"Initial commit\""
+  when: result|failed
