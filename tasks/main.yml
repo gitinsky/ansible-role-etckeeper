@@ -1,5 +1,10 @@
 - name: install EPEL repo
   yum: name=http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm state=present
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
+
+- name: install EPEL repo
+  yum: name=http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '6'
 
 - name: setup etckeeper
   yum: name=etckeeper state=present
