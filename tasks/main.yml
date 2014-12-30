@@ -8,6 +8,19 @@
 
 - name: setup etckeeper
   yum: name=etckeeper state=present
+  when: ansible_os_family == 'RedHat'
+
+- name: setup git
+  apt: name=git state=present
+  when: ansible_os_family == 'Debian'
+
+- name: setup etckeeper
+  apt: name=etckeeper state=present
+  when: ansible_os_family == 'Debian'
+
+- name: put etckeeper config
+  template: src=etckeeper/etckeeper.conf dest=/etc/etckeeper/etckeeper.conf owner=root group=root mode=0644
+  when: ansible_os_family == 'Debian'
 
 - name: check if a repo is initialized already
   command: bash -c "cd /etc && git status"
