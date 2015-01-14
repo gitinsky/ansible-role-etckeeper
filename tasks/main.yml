@@ -27,6 +27,12 @@
   ignore_errors: True
   register: result
 
+- name: configure user email in git
+  command: git config --global user.email "{{ git_user_email }}"
+
+- name: configure user name in git
+  command: git config --global user.name "{{ git_user_name }}"
+
 - name: init etckeeper repo
   command: bash -c "etckeeper init && etckeeper commit \"Initial commit\""
   when: result|failed
