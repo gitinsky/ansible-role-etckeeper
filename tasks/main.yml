@@ -32,13 +32,16 @@
   command: bash -c "cd /etc && git status"
   ignore_errors: True
   register: result
+  when: ansible_os_family != 'FreeBSD'
 
 - name: configure user email in git
   command: git config --global user.email "{{ git_user_email }}"
+  when: ansible_os_family != 'FreeBSD'
 
 - name: configure user name in git
   command: git config --global user.name "{{ git_user_name }}"
+  when: ansible_os_family != 'FreeBSD'
 
 - name: init etckeeper repo
   command: bash -c "etckeeper init && etckeeper commit \"Initial commit\""
-  when: result|failed
+  when: result|failed and ansible_os_family != 'FreeBSD'
