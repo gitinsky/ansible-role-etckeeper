@@ -43,5 +43,5 @@
   when: ansible_os_family != 'FreeBSD'
 
 - name: init etckeeper repo
-  command: bash -c "etckeeper init && etckeeper commit \"Initial commit\""
+  shell: etckeeper init && etckeeper commit "Initial commit"
   when: result|failed and ansible_os_family != 'FreeBSD'
