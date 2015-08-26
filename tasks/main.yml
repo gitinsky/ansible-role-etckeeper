@@ -20,9 +20,17 @@
   apt: name=git state=present
   when: ansible_os_family == 'Debian'
 
+- name: setup git
+  portage: name=dev-vcs/git state=present
+  when: ansible_os_family == 'Gentoo'
+
 - name: setup etckeeper
   apt: name=etckeeper state=present
   when: ansible_os_family == 'Debian'
+
+- name: setup etckeeper
+  portage: name=etckeeper state=present
+  when: ansible_os_family == 'Gentoo'
 
 - name: put etckeeper config
   template: src=etckeeper.conf dest=/etc/etckeeper/etckeeper.conf owner=root group=root mode=0644
