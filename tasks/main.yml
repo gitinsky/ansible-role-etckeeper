@@ -33,7 +33,7 @@
   when: ansible_os_family == 'Gentoo'
 
 - name: put etckeeper config
-  template: src=etckeeper.conf dest=/etc/etckeeper/etckeeper.conf owner=root group=root mode=0644
+  template: src=etckeeper.conf dest=/etc/etckeeper/etckeeper.conf owner=root group=root mode=0644 backup=yes
   when: ansible_os_family == 'Debian'
 
 - name: check if a repo is initialized already
