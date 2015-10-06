@@ -53,3 +53,7 @@
 - name: init etckeeper repo
   shell: etckeeper init && etckeeper commit "Initial commit"
   when: result|failed and ansible_os_family != 'FreeBSD'
+
+- name: add daily autocommit
+  template: src=daily-etckeeper dest=/etc/cron.daily/etckeeper mode=0755
+  when: ansible_os_family == 'Gentoo'
