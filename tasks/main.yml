@@ -18,7 +18,7 @@
 
 - name: setup git
   apt: name=git state=present
-  when: ansible_os_family == 'Debian' or ansible_os_family == "Linuxmint"
+  when: ansible_os_family == 'Debian' or ansible_os_family == "Linuxmint" or ansible_os_family == "Elbrus"
 
 - name: setup git
   portage: name=dev-vcs/git state=present
@@ -26,7 +26,7 @@
 
 - name: setup etckeeper
   apt: name=etckeeper state=present
-  when: ansible_os_family == 'Debian' or ansible_os_family == "Linuxmint"
+  when: ansible_os_family == 'Debian' or ansible_os_family == "Linuxmint" or ansible_os_family == "Elbrus"
 
 - name: setup etckeeper
   portage: name=etckeeper state=present
@@ -34,7 +34,7 @@
 
 - name: put etckeeper config
   template: src=etckeeper.conf dest=/etc/etckeeper/etckeeper.conf owner=root group=root mode=0644 backup=yes
-  when: ansible_os_family == 'Debian' or ansible_os_family == "Linuxmint"
+  when: ansible_os_family == 'Debian' or ansible_os_family == "Linuxmint" or ansible_os_family == "Elbrus"
 
 - name: check if a repo is initialized already
   shell: cd /etc && git status
