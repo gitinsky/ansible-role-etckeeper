@@ -1,0 +1,31 @@
+- name: install EPEL repo
+  yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm state=present
+  when: ansible_distribution_major_version == '7'
+
+- name: check if EPEL repo exists
+  shell: ls /etc/yum.repos.d/epel.repo
+  ignore_errors: True
+  register: result
+  when: ansible_distribution_major_version == '6'
+
+- name: install EPEL repo
+  yum: name=http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
+  when: ansible_distribution_major_version == '6' and result|failed
+
+- name: setup etckeeper
+  yum: name=etckeeper state=present
+
+- name: check if a repo is initialized already
+  shell: cd /etc && git status
+  ignore_errors: True
+  register: result
+
+- name: configure user email in git
+  command: git config --global user.email "{{ git_user_email }}"
+
+- name: configure user name in git
+  command: git config --global user.name "{{ git_user_name }}"
+
+- name: init etckeeper repo
+  shell: etckeeper init && etckeeper commit "Initial commit"
+  when: result|failed

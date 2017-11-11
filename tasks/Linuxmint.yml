@@ -1,0 +1,23 @@
+- name: setup git
+  apt: name=git state=present
+
+- name: setup etckeeper
+  apt: name=etckeeper state=present
+
+- name: put etckeeper config
+  template: src=etckeeper.conf dest=/etc/etckeeper/etckeeper.conf owner=root group=root mode=0644 backup=yes
+
+- name: check if a repo is initialized already
+  shell: cd /etc && git status
+  ignore_errors: True
+  register: result
+
+- name: configure user email in git
+  command: git config --global user.email "{{ git_user_email }}"
+
+- name: configure user name in git
+  command: git config --global user.name "{{ git_user_name }}"
+
+- name: init etckeeper repo
+  shell: etckeeper init && etckeeper commit "Initial commit"
+  when: result|failed

@@ -1,59 +1,17 @@
-- name: install EPEL repo
-  yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm state=present
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
+- include: RedHat.yml
+  when: ansible_os_family  == "RedHat"
 
-- name: check if EPEL repo exists
-  shell: ls /etc/yum.repos.d/epel.repo
-  ignore_errors: True
-  register: result
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '6'
+- include: Debian.yml
+  when: ansible_os_family  == "Debian"
 
-- name: install EPEL repo
-  yum: name=http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm state=present
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '6' and result|failed
+- include: Gentoo.yml
+  when: ansible_os_family  == "Gentoo"
 
-- name: setup etckeeper
-  yum: name=etckeeper state=present
-  when: ansible_os_family == 'RedHat'
+- include: Elbrus.yml
+  when: ansible_os_family  == "Elbrus"
 
-- name: setup git
-  apt: name=git state=present
-  when: ansible_os_family == 'Debian' or ansible_os_family == "Linuxmint" or ansible_os_family == "Elbrus"
+- include: Linuxmint.yml
+  when: ansible_os_family  == "Linuxmint"
 
-- name: setup git
-  portage: name=dev-vcs/git state=present
-  when: ansible_os_family == 'Gentoo'
-
-- name: setup etckeeper
-  apt: name=etckeeper state=present
-  when: ansible_os_family == 'Debian' or ansible_os_family == "Linuxmint" or ansible_os_family == "Elbrus"
-
-- name: setup etckeeper
-  portage: name=etckeeper state=present
-  when: ansible_os_family == 'Gentoo'
-
-- name: put etckeeper config
-  template: src=etckeeper.conf dest=/etc/etckeeper/etckeeper.conf owner=root group=root mode=0644 backup=yes
-  when: ansible_os_family == 'Debian' or ansible_os_family == "Linuxmint" or ansible_os_family == "Elbrus"
-
-- name: check if a repo is initialized already
-  shell: cd /etc && git status
-  ignore_errors: True
-  register: result
-  when: ansible_os_family != 'FreeBSD'
-
-- name: configure user email in git
-  command: git config --global user.email "{{ git_user_email }}"
-  when: ansible_os_family != 'FreeBSD'
-
-- name: configure user name in git
-  command: git config --global user.name "{{ git_user_name }}"
-  when: ansible_os_family != 'FreeBSD'
-
-- name: init etckeeper repo
-  shell: etckeeper init && etckeeper commit "Initial commit"
-  when: result|failed and ansible_os_family != 'FreeBSD'
-
-- name: add daily autocommit
-  template: src=daily-etckeeper dest=/etc/cron.daily/etckeeper mode=0755
-  when: ansible_os_family == 'Gentoo'
+- include: Archlinux.yml
+  when: ansible_os_family  == "Archlinux"
