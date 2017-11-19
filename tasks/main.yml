@@ -1,17 +1,17 @@
-- include: RedHat.yml
+- include_tasks: RedHat.yml
   when: ansible_os_family  == "RedHat"
 
-- include: Debian.yml
+- include_tasks: Debian.yml
   when: ansible_os_family  == "Debian"
 
-- include: Gentoo.yml
+- include_tasks: Gentoo.yml
   when: ansible_os_family  == "Gentoo"
 
-- include: Elbrus.yml
+- include_tasks: Elbrus.yml
   when: ansible_os_family  == "Elbrus"
 
-- include: Linuxmint.yml
+- include_tasks: Linuxmint.yml
   when: ansible_os_family  == "Linuxmint"
 
-- include: Archlinux.yml
+- include_tasks: Archlinux.yml
   when: ansible_os_family  == "Archlinux"
