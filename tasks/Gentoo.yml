@@ -7,13 +7,16 @@
 - name: check if a repo is initialized already
   shell: cd /etc && git status
   ignore_errors: True
+  changed_when: False
   register: result
 
 - name: configure user email in git
   command: git config --global user.email "{{ git_user_email }}"
+  when: result|failed # noqa 303
 
 - name: configure user name in git
   command: git config --global user.name "{{ git_user_name }}"
+  when: result|failed # noqa 303
 
 - name: init etckeeper repo
   shell: etckeeper init && etckeeper commit "Initial commit"
